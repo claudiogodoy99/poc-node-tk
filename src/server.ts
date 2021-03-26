@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { json, Request } from 'express'
 import Ticket from './models/Ticket'
 
 const PORT = process.env.PORT || 8080
@@ -6,7 +6,11 @@ const PORT = process.env.PORT || 8080
 
 const app = express()
 
-app.get('/tickets/:id',async (req,res) => {
+const router = express.Router()
+
+app.use(json())
+
+router.get('/tickets/:id',async (req,res) => {
     const id = req.route
     const found = await  Ticket.findOne({id})
 
@@ -14,28 +18,34 @@ app.get('/tickets/:id',async (req,res) => {
 })
 
 
-app.post('/tickets', async (req,res) => {
-    const {
-        nome,
-        email,
-        descricao
-    } = req.body
-
-    const newTicket = await Ticket.create({
+router.post('/tickets', async (request, response) => {
+    try{
+        const {
             nome,
             email,
             descricao
-        })
-
-    return res.status(201).json({
-            id: newTicket._id
-     })
+        } = request.body
+    
+        const newTicket = await Ticket.create({
+                nome,
+                email,
+                descricao
+            })
+    
+        return response.status(201).json({
+                id: newTicket._id
+         })
+    }catch{
+        return response.status(400).json({message: 'deu ruim fi'});
+    }
+  
 })
 
-app.put('/tickets/:id', (req,res) => {
+router.put('/tickets/:id', (req,res) => {
     
 })
 
+app.use('/',router);
 
 app.listen(PORT)
 
