@@ -27,12 +27,9 @@ app.post('/tickets', async (req,res) => {
             descricao
         })
 
-        return res.status(201).json({
+    return res.status(201).json({
             id: newTicket._id
-        })
-
-   
-  
+     })
 })
 
 app.put('/tickets/:id', (req,res) => {
