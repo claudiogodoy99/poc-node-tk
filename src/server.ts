@@ -21,8 +21,7 @@ app.post('/tickets', async (req,res) => {
         descricao
     } = req.body
 
-    try{
-        const newTicket = await Ticket.create({
+    const newTicket = await Ticket.create({
             nome,
             email,
             descricao
@@ -32,11 +31,7 @@ app.post('/tickets', async (req,res) => {
             id: newTicket._id
         })
 
-    }catch(ex){
-        return res.status(400).json({
-            message: 'something wrong'
-        })
-    }
+   
   
 })
 
